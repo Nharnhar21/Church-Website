@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin - New Vision</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header"><div class="header-inner"><div class="brand"><img src="D:\Church website\assests\images\Church logo.jpg" alt=""><div><h1>Admin Dashboard</h1></div></div></div></header>
+
+  <main class="container" style="margin-top:22px">
+    <section class="card">
+      <h2 class="section-title">Admin Sign-in (Demo)</h2>
+      <p class="muted small">This admin panel uses client-side storage for now. For secure production access, request a server-side login from your developer.</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:320px">
+          <h3>Sign in</h3>
+          <input id="admUserIn" placeholder="username" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef2">
+          <input id="admPassIn" type="password" placeholder="password" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef2;margin-top:8px">
+          <div style="margin-top:8px"><button class="primary" onclick="adminSignIn()">Sign In</button></div>
+          <p class="note" style="margin-top:8px">Default demo admin: <strong>admin</strong> / <strong>nvadmin123</strong> — change this after you sign in via the Admin profile controls.</p>
+        </div>
+
+        <div style="flex:1;min-width:320px">
+          <h3>Quick Admin Actions</h3>
+          <p><button onclick="openSermonAdd()">Open Sermon Add Modal</button></p>
+          <p><button onclick="openGalleryAdd()">Open Gallery Add Modal</button></p>
+          <p><button onclick="changeAdminPassword()">Change Admin Password</button></p>
+          <p><button onclick="localStorage.clear(); alert('localStorage cleared — all demo data removed (sermons/gallery)'); location.reload()">Clear Demo Data</button></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h3>Sermons (view & remove)</h3>
+      <div id="adminSermonList"></div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h3>Gallery (view & remove)</h3>
+      <div id="adminGalleryPreview"></div>
+    </section>
+  </main>
+
+  <footer><div class="footer-inner container"><div class="small muted">© <span id="yr"></span> New Vision Pentecostal Ministry</div></div></footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // admin sign in (client-side)
+    function adminSignIn(){
+      const u = document.getElementById('admUserIn').value.trim();
+      const p = document.getElementById('admPassIn').value.trim();
+      const adm = JSON.parse(localStorage.getItem('nv_admin')||'{}');
+      if(u===adm.username && p===adm.password){ localStorage.setItem('nv_isAdmin','1'); alert('Signed in as admin'); location.reload(); } else alert('Invalid credentials.');
+    }
+
+    // change admin password
+    function changeAdminPassword(){
+      if(localStorage.getItem('nv_isAdmin')!=='1'){ alert('Sign in first.'); return; }
+      const np = prompt('Enter new admin password (will replace demo password)');
+      if(!np) return; const adm = JSON.parse(localStorage.getItem('nv_admin')||'{}'); adm.password = np; localStorage.setItem('nv_admin', JSON.stringify(adm)); alert('Password changed.');
+    }
+
+    // list sermons and gallery with remove buttons
+    function renderAdminLists(){
+      const sList = JSON.parse(localStorage.getItem('nv_sermons')||'[]'); const sBox = document.getElementById('adminSermonList'); sBox.innerHTML='';
+      sList.forEach((s,i)=>{ const d=document.createElement('div'); d.style.marginBottom='10px'; d.innerHTML=`<strong>${s.title}</strong> (${s.type||'youtube'}) <button onclick="removeSermon(${i})" style="margin-left:8px">Remove</button>`; sBox.appendChild(d); });
+
+      const g = JSON.parse(localStorage.getItem('nv_gallery')||'{}'); const gp = document.getElementById('adminGalleryPreview'); gp.innerHTML='';
+      Object.keys(g).forEach(cat=>{
+        const arr = g[cat]; if(arr.length===0) return; const h=document.createElement('h4'); h.textContent = cat; gp.appendChild(h);
+        arr.forEach((it,idx)=>{ const d = document.createElement('div'); d.innerHTML = `${it.type||'image'} — ${it.url} <button onclick="removeGalleryItem('${cat}', ${idx})" style="margin-left:8px">Remove</button>`; gp.appendChild(d); });
+      });
+    }
+
+    // modal helpers to add items
+    function openSermonAdd(){
+      if(localStorage.getItem('nv_isAdmin')!=='1'){ alert('Sign in as admin first'); return; }
+      const html = `<h3>Add Sermon</h3>
+        <input id="sTitle" placeholder="title" style="width:100%;padding:8px;margin-top:8px">
+        <input id="sUrl" placeholder="YouTube ID or full URL or mp4 url" style="width:100%;padding:8px;margin-top:8px">
+        <select id="sType" style="width:100%;padding:8px;margin-top:8px"><option value="youtube">YouTube</option><option value="video">Video file / URL</option></select>
+        <div style="text-align:right;margin-top:8px"><button class="primary" onclick="adminAddSermon()">Add</button></div>`;
+      openModal(html);
+    }
+    function adminAddSermon(){
+      const title = document.getElementById('sTitle').value.trim(); const url = document.getElementById('sUrl').value.trim(); const type = document.getElementById('sType').value;
+      if(!url||!title){ alert('Enter title and url/id'); return; }
+      let id = url;
+      if(type==='youtube'){
+        const m = url.match(/(?:v=|\/embed\/|youtu\.be\/|v\/)([A-Za-z0-9_-]{6,})/); id = m?m[1]:url;
+      }
+      addSermonObj({title,id,type});
+      closeModal(); alert('Sermon added'); renderAdminLists(); location.reload();
+    }
+
+    function openGalleryAdd(){
+      if(localStorage.getItem('nv_isAdmin')!=='1'){ alert('Sign in as admin first'); return; }
+      // choose category and type
+      const cats = ['Pastors','Elders','Dickens','Ushers','Media','Sound','Choir','Children','YouthVibe','Instrumentalists','Members','Invited'];
+      const catOptions = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+      const html = `<h3>Add Gallery Item</h3>
+        <select id="galCat" style="width:100%;padding:8px;margin-top:8px">${catOptions}</select>
+        <input id="galUrl" placeholder="Image or video URL" style="width:100%;padding:8px;margin-top:8px">
+        <select id="galType" style="width:100%;padding:8px;margin-top:8px"><option value="image">Image</option><option value="video">Video</option></select>
+        <div style="text-align:right;margin-top:8px"><button class="primary" onclick="adminAddGallery()">Add item</button></div>`;
+      openModal(html);
+    }
+    function adminAddGallery(){ const cat=document.getElementById('galCat').value; const url=document.getElementById('galUrl').value.trim(); const type=document.getElementById('galType').value; if(!url){alert('Enter url');return;} addGalleryItem(cat,url,type); closeModal(); alert('Added'); renderAdminLists(); location.reload(); }
+
+    // on load, show admin lists
+    renderAdminLists();
+  </script>
+</body>
+</html>

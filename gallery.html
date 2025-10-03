@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery - New Vision Pentecostal Ministry</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <!-- NOTE: Replace logo path with your church logo -->
+        <img src="D:\Church website\assests\images\Church logo.jpg" alt="Church Logo">
+        <div>
+          <h1>New Vision — Gallery</h1>
+          <div class="small">Memories & Highlights</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="sermons.html">Sermons</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="donate.html" class="cta">Donate</a>
+      </nav>
+      <button class="menu-toggle" onclick="document.querySelector('.nav').classList.toggle('open')">☰</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container" style="margin-top:24px">
+    <section class="card">
+      <h2 class="section-title">Church Gallery</h2>
+      <p class="muted small">Photos and videos from services, conferences, and special programs. Admins can add or remove content via the Admin dashboard (login required).</p>
+
+      <!-- ================== GALLERY GRID ================== -->
+      <div class="gallery-grid">
+
+        <!-- OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Youth Ministry Event</h3>
+          <!-- NOTE: Replace with actual offline image in assets/images/ -->
+          <img src="D:\Church website\assests\images\Youth.jpg" alt="Youth Event" class="gallery-img">
+        </div>
+
+        <!-- ANOTHER OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Sunday Worship</h3>
+          <img src="D:\Church website\assests\images\Outreach.JPG" alt="Sunday Worship" class="gallery-img">
+        </div>
+
+          <!-- OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Youth Ministry Event</h3>
+          <!-- NOTE: Replace with actual offline image in assets/images/ -->
+          <img src="D:\Church website\assests\images\Youth.jpg" alt="Youth Event" class="gallery-img">
+        </div>
+
+        <!-- ANOTHER OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Sunday Worship</h3>
+          <img src="D:\Church website\assests\images\Outreach.JPG" alt="Sunday Worship" class="gallery-img">
+        </div>
+
+          <!-- OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Youth Ministry Event</h3>
+          <!-- NOTE: Replace with actual offline image in assets/images/ -->
+          <img src="D:\Church website\assests\images\Youth.jpg" alt="Youth Event" class="gallery-img">
+        </div>
+
+        <!-- ANOTHER OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Sunday Worship</h3>
+          <img src="D:\Church website\assests\images\Outreach.JPG" alt="Sunday Worship" class="gallery-img">
+        </div>
+
+          <!-- OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Youth Ministry Event</h3>
+          <!-- NOTE: Replace with actual offline image in assets/images/ -->
+          <img src="D:\Church website\assests\images\Youth.jpg" alt="Youth Event" class="gallery-img">
+        </div>
+
+        <!-- ANOTHER OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Sunday Worship</h3>
+          <img src="D:\Church website\assests\images\Outreach.JPG" alt="Sunday Worship" class="gallery-img">
+        </div>
+
+          <!-- OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Youth Ministry Event</h3>
+          <!-- NOTE: Replace with actual offline image in assets/images/ -->
+          <img src="D:\Church website\assests\images\Youth.jpg" alt="Youth Event" class="gallery-img">
+        </div>
+
+        <!-- ANOTHER OFFLINE IMAGE -->
+        <div class="gallery-item">
+          <h3>Sunday Worship</h3>
+          <img src="D:\Church website\assests\images\Outreach.JPG" alt="Sunday Worship" class="gallery-img">
+        </div>
+
+
+
+
+
+        <!-- OFFLINE VIDEO -->
+        <div class="gallery-item">
+          <h3>Choir Ministration</h3>
+          <!-- NOTE: Replace with actual offline video in assets/videos/ -->
+          <video controls width="320">
+            <source src= "D:\Church website\assests\video\two.mp4"type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <!-- YOUTUBE VIDEO -->
+        <div class="gallery-item">
+          <h3>Special Guest Preacher</h3>
+          <iframe width="320" height="180"
+            src="https://www.youtube.com/embed/VIDEO_ID"
+            frameborder="0" allowfullscreen>
+          </iframe>
+        </div>
+
+      </div>
+      <!-- ================== END GALLERY GRID ================== -->
+
+      <div style="margin-top:12px">
+        <button onclick="window.location.href='index.html'">Back to Home</button>
+        <button style="margin-left:8px" onclick="adminLoginPrompt()">Admin Sign-in</button>
+      </div>
+    </section>
+
+    <!-- INFO FOR ADMIN -->
+    <section class="card" style="margin-top:18px">
+      <h3 class="section-title">Admin Notes</h3>
+      <p class="muted small">Only admins can add or delete gallery items. Please <a href="admin.html">login as Admin</a> to update this gallery.</p>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner container">
+      <div class="small muted">© <span id="yr">2025</span> New Vision Pentecostal Ministry</div>
+      <div>
+        <a href="https://youtube.com/@newvisionpentecostalministry?si=lTVUSN3c8uadZ00w" 
+           target="_blank" 
+           style="color:#fff;background:#e74c3c;padding:8px 12px;border-radius:8px;text-decoration:none">
+          Subscribe
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JS ===== -->
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    // NOTE: The gallery currently displays seeded offline + online media.
+    // Admin add/remove will be connected later via admin.html with authentication.
+  </script>
+</body>
+</html>

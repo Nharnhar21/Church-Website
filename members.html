@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Members - New Vision</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header"><div class="header-inner"><div class="brand"><img src="images/church-logo.jpg" alt=""><div><h1>Member Portal</h1></div></div></div></header>
+
+  <main class="container" style="margin-top:22px">
+    <section class="card">
+      <h2 class="section-title">Member Login / Register</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:300px">
+          <h3>Register</h3>
+          <input id="mName" placeholder="Full name" style="width:100%;padding:8px;border-radius:6px">
+          <input id="mEmail" placeholder="Email" style="width:100%;padding:8px;border-radius:6px;margin-top:8px">
+          <input id="mPhone" placeholder="Phone (optional)" style="width:100%;padding:8px;border-radius:6px;margin-top:8px">
+          <div style="margin-top:8px"><button class="primary" onclick="memberRegister()">Register</button></div>
+        </div>
+
+        <div style="flex:1;min-width:300px">
+          <h3>Login</h3>
+          <input id="mLoginEmail" placeholder="Email" style="width:100%;padding:8px;border-radius:6px">
+          <div style="margin-top:8px"><button class="primary" onclick="memberLogin()">Login</button></div>
+          <div class="note" style="margin-top:8px">Members who sign up will be able to receive church news and join fellowship groups (demo, client-side).</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="footer-inner container"><div class="small muted">© <span id="yr"></span> New Vision Pentecostal Ministry</div></div></footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    function memberRegister(){
+      const n = document.getElementById('mName').value.trim(); const e = document.getElementById('mEmail').value.trim(); const p = document.getElementById('mPhone').value.trim();
+      if(!n || !e){ alert('Enter name and email'); return; }
+      const arr = JSON.parse(localStorage.getItem('nv_members')||'[]'); arr.push({name:n,email:e,phone:p}); localStorage.setItem('nv_members', JSON.stringify(arr)); alert('Registered as member (demo).'); document.getElementById('mName').value=''; document.getElementById('mEmail').value=''; document.getElementById('mPhone').value='';
+    }
+    function memberLogin(){
+      const e = document.getElementById('mLoginEmail').value.trim(); if(!e){ alert('Enter email'); return; }
+      const arr = JSON.parse(localStorage.getItem('nv_members')||'[]'); const found = arr.find(x=>x.email===e);
+      if(found){ localStorage.setItem('nv_memberLogged','1'); alert('Logged in as member (demo).'); location.href='index.html'; } else alert('Not registered. Please register first.');
+    }
+  </script>
+</body>
+</html>
